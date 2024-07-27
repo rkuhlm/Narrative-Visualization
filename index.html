@@ -1,118 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Narrative Visualization</title>
-    <!-- Link to D3.js library -->
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-    <style>
-        /* Basic CSS for layout */
-        body {
-            font-family: Arial, sans-serif;
-        }
-        h1 {
-            text-align: center;
-        }
-        .container {
-            width: 80%;
-            margin: 0 auto;
-        }
-        .scene {
-            margin-bottom: 50px;
-        }
-        .annotation {
-            font-size: 12px;
-            fill: black;
-        }
-    </style>
+<title>Page Title</title>
 </head>
 <body>
-    <h1>Hello World</h1>
-    <div class="container">
-        <!-- Placeholder for scenes -->
-        <div id="scene1" class="scene"></div>
-        <div id="scene2" class="scene"></div>
-        <div id="scene3" class="scene"></div>
-    </div>
-    <script>
-        // JavaScript code to set up D3 visualization
 
-        // Sample data
-        const data = [
-            {name: 'A', value: 30},
-            {name: 'B', value: 80},
-            {name: 'C', value: 45},
-            {name: 'D', value: 60},
-            {name: 'E', value: 20},
-            {name: 'F', value: 90},
-            {name: 'G', value: 55}
-        ];
+<h1>This is a Heading</h1>
+<p>This is a paragraph.</p>
 
-        // Function to create a bar chart
-        function createBarChart(data, selector) {
-            const svg = d3.select(selector).append('svg')
-                .attr('width', 600)
-                .attr('height', 400);
-
-            const margin = {top: 20, right: 20, bottom: 30, left: 40},
-                width = +svg.attr('width') - margin.left - margin.right,
-                height = +svg.attr('height') - margin.top - margin.bottom;
-
-            const g = svg.append('g')
-                .attr('transform', `translate(${margin.left},${margin.top})`);
-
-            const x = d3.scaleBand()
-                .rangeRound([0, width])
-                .padding(0.1)
-                .domain(data.map(d => d.name));
-
-            const y = d3.scaleLinear()
-                .rangeRound([height, 0])
-                .domain([0, d3.max(data, d => d.value)]);
-
-            g.append('g')
-                .attr('class', 'axis axis--x')
-                .attr('transform', `translate(0,${height})`)
-                .call(d3.axisBottom(x));
-
-            g.append('g')
-                .attr('class', 'axis axis--y')
-                .call(d3.axisLeft(y).ticks(10, '%'));
-
-            g.selectAll('.bar')
-                .data(data)
-                .enter().append('rect')
-                .attr('class', 'bar')
-                .attr('x', d => x(d.name))
-                .attr('y', d => y(d.value))
-                .attr('width', x.bandwidth())
-                .attr('height', d => height - y(d.value));
-        }
-
-        // Create scenes
-        createBarChart(data, '#scene1');
-        createBarChart(data, '#scene2');
-        createBarChart(data, '#scene3');
-
-        // Example annotations (you can add more detailed ones)
-        d3.select('#scene1').append('text')
-            .attr('class', 'annotation')
-            .attr('x', 50)
-            .attr('y', 20)
-            .text('Scene 1: Overview');
-
-        d3.select('#scene2').append('text')
-            .attr('class', 'annotation')
-            .attr('x', 50)
-            .attr('y', 20)
-            .text('Scene 2: Detailed Analysis');
-
-        d3.select('#scene3').append('text')
-            .attr('class', 'annotation')
-            .attr('x', 50)
-            .attr('y', 20)
-            .text('Scene 3: Conclusion');
-    </script>
 </body>
 </html>
