@@ -1,12 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Page Title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3 CSV Visualization</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <style>
+        .bar {
+            fill: steelblue;
+        }
+        .bar:hover {
+            fill: orange;
+        }
+        .x-axis path,
+        .x-axis line,
+        .y-axis path,
+        .y-axis line {
+            shape-rendering: crispEdges;
+        }
+    </style>
 </head>
 <body>
+    <h1>Car Data Visualization</h1>
+    <div id="chart"></div>
+    <script>
+        // Load data from CSV file
+        d3.csv('https://flunky.github.io/cars2017.csv').then(data => {
+            // Log data to inspect it
+            console.log(data);
 
-<h1>This is a Heading</h1>
-<p>This is a paragraph.</p>
+            // Convert numeric values if necessary
+            data.forEach(d => {
+                d['MPG'] = +d['MPG'];
+                d['Cylinders'] = +d['Cylinders'];
+            });
 
+            // Set up dimensions and margins
+            const width = 800;
+            const height = 400;
+            const margin = { top: 20, right: 20, bottom: 30, left: 40 };
+
+            // Create SVG element
+            const svg = d3.select("#chart")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
+
+            // Set up scales
+            const x = d3.scaleBand()
+                .domain(data.map(d => d['Car']))
+                .range([0, width])
+                .padding(0.1);
+
+            const y = d3.scaleLinear()
+                .domain([0, d3.max(data, d => d['MPG'])])
+                .nice()
+                .range([height, 0]);
+
+            // Add X axis
+            svg.append("g")
+                .attr("class", "x-axis")
+                .attr("transform", `translate(0,${height})`)
+                .call(d3.axisBottom(x))
+                .selectAll("text")
+                .attr("transform", "rotate(-45)")
+                .style("text-anchor", "end");
+
+            // Add Y axis
+            svg.append("g")
+                .attr("class", "y-axis")
+                .call(d3.axisLeft(y));
+
+            // Add bars
+            svg.selectAll(".bar")
+                .data(data)
+                .enter()
+                .append("rect")
+                .attr("class", "bar")
+                .attr("x", d => x(d['Car']))
+                .attr("y", d => y(d['MPG']))
+                .attr("width", x.bandwidth())
+                .attr("height", d => height - y(d['MPG']));
+        }).catch(error => {
+            console.error('Error loading the CSV data:', error);
+        });
+    </script>
 </body>
 </html>
