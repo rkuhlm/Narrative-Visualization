@@ -18,10 +18,16 @@
         .y-axis line {
             shape-rendering: crispEdges;
         }
+        .x-axis text {
+            font-size: 12px;
+        }
+        .y-axis text {
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
-    <h1>Car Data Visualization</h1>
+    <h1>Average Highway MPG by Car Make</h1>
     <div id="chart"></div>
     <script>
         // Load data from CSV file
@@ -31,14 +37,23 @@
 
             // Convert numeric values if necessary
             data.forEach(d => {
-                d['MPG'] = +d['MPG'];
-                d['Cylinders'] = +d['Cylinders'];
+                d['EngineCylinders'] = +d['EngineCylinders'];
+                d['AverageHighwayMPG'] = +d['AverageHighwayMPG'];
             });
+
+            // Aggregate data by Make
+            const aggregatedData = d3.rollup(
+                data,
+                v => d3.mean(v, d => d['AverageHighwayMPG']),
+                d => d['Make']
+            );
+
+            const formattedData = Array.from(aggregatedData, ([Make, AverageHighwayMPG]) => ({ Make, AverageHighwayMPG }));
 
             // Set up dimensions and margins
             const width = 800;
             const height = 400;
-            const margin = { top: 20, right: 20, bottom: 30, left: 40 };
+            const margin = { top: 20, right: 20, bottom: 30, left: 60 };
 
             // Create SVG element
             const svg = d3.select("#chart")
@@ -50,12 +65,12 @@
 
             // Set up scales
             const x = d3.scaleBand()
-                .domain(data.map(d => d['Car']))
+                .domain(formattedData.map(d => d['Make']))
                 .range([0, width])
                 .padding(0.1);
 
             const y = d3.scaleLinear()
-                .domain([0, d3.max(data, d => d['MPG'])])
+                .domain([0, d3.max(formattedData, d => d['AverageHighwayMPG'])])
                 .nice()
                 .range([height, 0]);
 
@@ -75,14 +90,14 @@
 
             // Add bars
             svg.selectAll(".bar")
-                .data(data)
+                .data(formattedData)
                 .enter()
                 .append("rect")
                 .attr("class", "bar")
-                .attr("x", d => x(d['Car']))
-                .attr("y", d => y(d['MPG']))
+                .attr("x", d => x(d['Make']))
+                .attr("y", d => y(d['AverageHighwayMPG']))
                 .attr("width", x.bandwidth())
-                .attr("height", d => height - y(d['MPG']));
+                .attr("height", d => height - y(d['AverageHighwayMPG']));
         }).catch(error => {
             console.error('Error loading the CSV data:', error);
         });
