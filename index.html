@@ -137,7 +137,7 @@
             }
 
 
-        // Load data from CSV file
+
         d3.csv('https://flunky.github.io/cars2017.csv').then(data => {
             // Convert numeric values if necessary
             data.forEach(d => {
@@ -146,7 +146,7 @@
                 d['AverageCityMPG'] = +d['AverageCityMPG'];
             });
 
-            // Filter data for cars with 4 engine cylinders
+
             const filteredData4 = data.filter(d => d['EngineCylinders'] === 4);
             const aggregatedHighwayData4 = d3.rollup(
                 filteredData4,
@@ -210,7 +210,7 @@
                 AverageCityMPG
             }));
 
-            // Filter data for cars with 10 engine cylinders
+
             const filteredData10 = data.filter(d => d['EngineCylinders'] === 10);
             const aggregatedHighwayData10 = d3.rollup(
                 filteredData10,
@@ -231,7 +231,7 @@
                 AverageCityMPG
             }));
 
-            // Filter data for cars with 12 engine cylinders
+
             const filteredData12 = data.filter(d => d['EngineCylinders'] === 12);
             const aggregatedHighwayData12 = d3.rollup(
                 filteredData12,
@@ -252,12 +252,12 @@
                 AverageCityMPG
             }));
 
-            // Set up dimensions and margins
+
             const width = 1000; // Increased width
             const height = 500; // Increased height
             const margin = { top: 40, right: 20, bottom: 100, left: 60 }; // Increased top margin for titles
 
-            // Create SVG elements for the charts
+
             function createCharts(containerIdHighway, dataHighway, containerIdCity, dataCity, titleHighway, titleCity) {
                 const svgHighway = d3.select(containerIdHighway)
                     .append("svg")
@@ -273,7 +273,7 @@
                     .append("g")
                     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-                // Set up scales and axes
+
                 const xHighway = d3.scaleBand()
                     .domain(dataHighway.map(d => d['Make']))
                     .range([0, width])
@@ -294,7 +294,7 @@
                     .nice()
                     .range([height, 0]);
 
-                // Add X axis to the highway chart
+
                 svgHighway.append("g")
                     .attr("class", "x-axis")
                     .attr("transform", `translate(0,${height})`)
@@ -305,14 +305,14 @@
                     .style("font-size", "12px");
 
 
-                // Add Y axis to the highway chart
+
                 svgHighway.append("g")
                     .attr("class", "y-axis")
                     .call(d3.axisLeft(yHighway));
 
 
 
-                // Add bars to the highway chart
+
                 svgHighway.selectAll(".bar")
                     .data(dataHighway)
                     .enter()
@@ -333,14 +333,14 @@
                         d3.select("#tooltip").style("opacity", 0);
                     });
 
-                // Add title to the highway chart
+
                 svgHighway.append("text")
                     .attr("class", "chart-title")
                     .attr("x", width / 2)
                     .attr("y", -margin.top / 2)
                     .text(titleHighway);
 
-                // Add X axis to the city chart
+
                 svgCity.append("g")
                     .attr("class", "x-axis")
                     .attr("transform", `translate(0,${height})`)
@@ -350,12 +350,12 @@
                     .style("text-anchor", "end")
                     .style("font-size", "12px");
 
-                // Add Y axis to the city chart
+
                 svgCity.append("g")
                     .attr("class", "y-axis")
                     .call(d3.axisLeft(yCity));
 
-                // Add bars to the city chart
+
                 svgCity.selectAll(".bar")
                     .data(dataCity)
                     .enter()
@@ -376,7 +376,7 @@
                         d3.select("#tooltip").style("opacity", 0);
                     });
 
-                // Add title to the city chart
+
                 svgCity.append("text")
                     .attr("class", "chart-title")
                     .attr("x", width / 2)
@@ -389,10 +389,10 @@
                 const thead = table.append("thead");
                 const tbody = table.append("tbody");
 
-            // Define table columns
+
                 const columns = ["Make", "Fuel", "EngineCylinders", "AverageHighwayMPG", "AverageCityMPG"];
 
-            // Append header row
+
                 thead.append("tr")
                     .selectAll("th")
                     .data(columns)
@@ -400,13 +400,13 @@
                     .append("th")
                     .text(d => d);
 
-            // Append rows
+
                 const rows = tbody.selectAll("tr")
                     .data(data)
                     .enter()
                     .append("tr");
 
-            // Append cells
+
                 rows.selectAll("td")
                     .data(row => columns.map(column => ({ column, value: row[column] })))
                     .enter()
@@ -414,7 +414,7 @@
                     .text(d => d.value);
             }
 
-            // Call the function to create data table after loading the CSV
+
             createDataTable(data);
 
             function createBarChart(data) {
@@ -425,7 +425,7 @@
                     .append("g")
                     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-            // Filter out data with engine cylinders equal to 0
+
                 const filteredData = data.filter(d => d['EngineCylinders'] > 0);
 
                 const aggregatedData = d3.rollup(
@@ -438,7 +438,7 @@
                     AverageHighwayMPG
                 }));
 
-                // Set up scales and axes
+
                 const x = d3.scaleBand()
                     .domain(formattedData.map(d => d.EngineCylinders))
                     .range([0, width])
@@ -449,21 +449,21 @@
                     .nice()
                     .range([height, 0]);
 
-               // Add X axis
+
                svg.append("g")
                     .attr("class", "x-axis")
                     .attr("transform", `translate(0,${height})`)
                     .call(d3.axisBottom(x));
 
-               // Add Y axis
+
                svg.append("g")
                     .attr("class", "y-axis")
                     .call(d3.axisLeft(y));
 
-               // Create tooltip
+
                     const tooltip = d3.select("#tooltip");
 
-                // Add bars
+
                 svg.selectAll(".bar")
                     .data(formattedData)
                     .enter()
@@ -487,14 +487,14 @@
             tooltip.style("opacity", 0);
         });
 
-    // Add title
+
     svg.append("text")
         .attr("class", "chart-title")
         .attr("x", width / 2)
         .attr("y", -margin.top / 2)
         .text("Overall Average Highway MPG by Engine Cylinders");
 
-    // Add X axis label
+
     svg.append("text")
         .attr("class", "x-axis-label")
         .attr("x", width / 2)
@@ -502,7 +502,7 @@
         .attr("text-anchor", "middle")
         .text("Engine Cylinders");
 
-    // Add Y axis label
+
     svg.append("text")
         .attr("class", "y-axis-label")
         .attr("x", -height / 2)
@@ -522,7 +522,7 @@ function createCityBarChart(data) {
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    // Filter out data with engine cylinders equal to 0
+
     const filteredData = data.filter(d => d['EngineCylinders'] > 0);
 
     const aggregatedData = d3.rollup(
@@ -535,7 +535,7 @@ function createCityBarChart(data) {
         AverageCityMPG
     }));
 
-    // Set up scales and axes
+
     const x = d3.scaleBand()
         .domain(formattedData.map(d => d.EngineCylinders))
         .range([0, width])
@@ -546,21 +546,21 @@ function createCityBarChart(data) {
         .nice()
         .range([height, 0]);
 
-    // Add X axis
+
     svg.append("g")
         .attr("class", "x-axis")
         .attr("transform", `translate(0,${height})`)
         .call(d3.axisBottom(x));
 
-    // Add Y axis
+
     svg.append("g")
         .attr("class", "y-axis")
         .call(d3.axisLeft(y));
 
-    // Create tooltip
+
     const tooltip = d3.select("#tooltip");
 
-    // Add bars
+
     svg.selectAll(".bar")
         .data(formattedData)
         .enter()
@@ -584,14 +584,14 @@ function createCityBarChart(data) {
             tooltip.style("opacity", 0);
         });
 
-    // Add title
+
     svg.append("text")
         .attr("class", "chart-title")
         .attr("x", width / 2)
         .attr("y", -margin.top / 2)
         .text("Overall Average City MPG by Engine Cylinders");
 
-    // Add X axis label
+
     svg.append("text")
         .attr("class", "x-axis-label")
         .attr("x", width / 2)
@@ -599,7 +599,7 @@ function createCityBarChart(data) {
         .attr("text-anchor", "middle")
         .text("Engine Cylinders");
 
-    // Add Y axis label
+
     svg.append("text")
         .attr("class", "y-axis-label")
         .attr("x", -height / 2)
@@ -609,7 +609,6 @@ function createCityBarChart(data) {
         .text("Average City MPG");
 }
 
-// Call the function to create the city bar chart
 createCityBarChart(data);
 
             createCharts("#chart1", formattedHighwayData4, "#chart2", formattedCityData4, "4-Cylinder Engine Average Highway MPG", "4-Cylinder Engine Average City MPG");
@@ -618,7 +617,7 @@ createCityBarChart(data);
             createCharts("#chart7", formattedHighwayData10, "#chart8", formattedCityData10, "10-Cylinder Engine Average Highway MPG", "10-Cylinder Engine Average City MPG");
             createCharts("#chart9", formattedHighwayData12, "#chart10", formattedCityData12, "12-Cylinder Engine Average Highway MPG", "12-Cylinder Engine Average City MPG");
 
-            // Slideshow functionality
+
             let currentSlide = 1;
 
             function showSlide(slideNumber) {
