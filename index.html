@@ -96,19 +96,39 @@
         <button onclick="showSlide(2)">Go to 6-Cylinder</button>
         <button onclick="showSlide(3)">Go to 8-Cylinder</button>
         <button onclick="showSlide(4)">Go to 10-Cylinder</button>
+        <button onclick="showSlide(6)">Full Data Set</button>
+        <button onclick="showSlide(7)">Average Highway MPG</button>
         <div id="chart9"></div>
         <div id="chart10"></div>
     </div>
+
+        <!-- Slide 6: Data Table -->
+    <div class="slide" id="slide6">
+        <h2>Full Data Set</h2>
+        <div id="data-table"></div>
+    </div>
+
+    <!-- Slide 7: Bar Chart for Average Highway MPG by Engine Cylinders -->
+    <div class="slide" id="slide7">
+        <h2>Average Highway MPG by Engine Cylinders</h2>
+        <div id="chart11"></div>
+    </div>
+
+
     <!-- Tooltip div -->
     <div id="tooltip" class="tooltip"></div>
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script>
+
+
     function showSlide(slideNumber) {
                 d3.selectAll(".slide").classed("active", false);
                 d3.select(`#slide${slideNumber}`).classed("active", true);
                 currentSlide = slideNumber;
             }
+
+
         // Load data from CSV file
         d3.csv('https://flunky.github.io/cars2017.csv').then(data => {
             // Convert numeric values if necessary
@@ -352,6 +372,39 @@
                     .attr("y", -margin.top / 2)
                     .text(titleCity);
             }
+
+            function createDataTable(data) {
+                const table = d3.select("#data-table").append("table").attr("border", 1);
+                const thead = table.append("thead");
+                const tbody = table.append("tbody");
+
+            // Define table columns
+                const columns = ["Make", "Fuel", "EngineCylinders", "AverageHighwayMPG", "AverageCityMPG"];
+
+            // Append header row
+                thead.append("tr")
+                    .selectAll("th")
+                    .data(columns)
+                    .enter()
+                    .append("th")
+                    .text(d => d);
+
+            // Append rows
+                const rows = tbody.selectAll("tr")
+                    .data(data)
+                    .enter()
+                    .append("tr");
+
+            // Append cells
+                rows.selectAll("td")
+                    .data(row => columns.map(column => ({ column, value: row[column] })))
+                    .enter()
+                    .append("td")
+                    .text(d => d.value);
+            }
+
+            // Call the function to create data table after loading the CSV
+            createDataTable(data);
 
             createCharts("#chart1", formattedHighwayData4, "#chart2", formattedCityData4, "4-Cylinder Engine Average Highway MPG", "4-Cylinder Engine Average City MPG");
             createCharts("#chart3", formattedHighwayData6, "#chart4", formattedCityData6, "6-Cylinder Engine Average Highway MPG", "6-Cylinder Engine Average City MPG");
