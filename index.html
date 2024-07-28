@@ -59,7 +59,7 @@
         <button id="prev">Previous</button>
         <button id="next">Next</button>
     </div>
-    
+
 
     <!-- Slide 1: Charts -->
     <div class="slide active" id="slide1">
@@ -92,15 +92,23 @@
     <!-- Slide 5: Charts -->
     <div class="slide" id="slide5">
         <h2>MPG Ratings for 12-Cylinder Engines</h2>
+        <button onclick="showSlide(1)">Go to 4-Cylinder</button>
+        <button onclick="showSlide(2)">Go to 6-Cylinder</button>
+        <button onclick="showSlide(3)">Go to 8-Cylinder</button>
+        <button onclick="showSlide(4)">Go to 10-Cylinder</button>
         <div id="chart9"></div>
         <div id="chart10"></div>
     </div>
-
     <!-- Tooltip div -->
     <div id="tooltip" class="tooltip"></div>
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script>
+    function showSlide(slideNumber) {
+                d3.selectAll(".slide").classed("active", false);
+                d3.select(`#slide${slideNumber}`).classed("active", true);
+                currentSlide = slideNumber;
+            }
         // Load data from CSV file
         d3.csv('https://flunky.github.io/cars2017.csv').then(data => {
             // Convert numeric values if necessary
